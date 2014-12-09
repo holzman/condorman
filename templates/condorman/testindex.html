@@ -1,0 +1,63 @@
+<head>
+<style type="text/css" title="currentStyle">
+@import "/media/css/jquery.dataTables.css";
+</style>
+
+<script type="text/javascript" src="/media/js/jquery.js"/></script>
+<script type="text/javascript" src="/media/js/jquery.dataTables.js"/></script>
+<script type="text/javascript" src="/media/js/dataTables-bnh.js"/></script>
+<script type="text/javascript" type="utf-8"/>
+   $(document).ready(function() {
+       $('#priotable').dataTable( {
+       "aoColumns": [null, null,
+          { "sType": "monthYear" },
+	  { "sType": "monthYear" },
+	  null],
+          "bPaginate": false,
+	  "bAutoWidth": false,
+	  } );
+   } );
+</script>
+</head>
+
+<body>
+
+<h1>Table of user priorities</h1>
+
+{% if userList %}
+<form action="/condorman/process/" method="post">
+<table id="priotable" border="2"  cellspacing="1">
+<thead><tr>
+<th>User</th><th>Priority Factor</th><th>Start Date</th><th>End Date</th>
+{% if can_del %}<th>Delete?</th>{% endif %}
+</tr></thead>
+<tbody>
+{% for user in userList %}
+{% for pf in user.priofactor_set.all %}
+
+<tr>
+    <td> {% if forloop.first %} {{ user }} {% endif %} </td> 
+    <td><font {% if pf.expired %} color="red" {% endif %} >
+    {{ pf.factor }} </font></td>
+    <td><font {% if pf.expired %} color="red" {% endif %} >
+    {{ pf.start_date|date:"F j, Y" }} </font></td>
+    <td><font {% if pf.expired %} color="red" {% endif %} >
+    {{ pf.end_date|date:"F j, Y" }} </font></td>
+    {% if can_del %}<td> <input type="checkbox" name="remove" id="pf{{ forloop.counter }}" value="{{ pf.id }}" /></td>  {% endif %}
+</tr>
+{% endfor %}
+{% endfor %}
+</tbody>
+</table>
+<br>
+<input type="submit" value="Submit" />
+</form>
+{% endif %}
+<p>
+{% if can_add %} <a href="/condorman/add">Add a new line</a> {% endif %}
+
+<br><br><br>
+<small>Authenticated as: <font color="blue">{{ remote_user }}
+{{ userHash }}</font></small>
+<br>
+</body>
