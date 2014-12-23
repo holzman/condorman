@@ -39,8 +39,6 @@ cp -a manage.py %{buildroot}/%{prefix}
 %{prefix}/condorman
 %{prefix}/mysite
 %{prefix}/manage.py
-%{prefix}/manage.pyc
-%{prefix}/manage.pyo
 %{prefix}/templates
 
 %changelog
