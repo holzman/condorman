@@ -6,6 +6,7 @@ BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Prefix: 	/var/lib/djangoapp
 Source:         condorman-%{version}.tar.gz
 AutoReqProv: no
+BuildArch:   noarch
 
 Group: default
 License:        Fermitools Software Legal Information (Modified BSD License)
