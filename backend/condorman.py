@@ -9,6 +9,14 @@ import pytz
 import re
 import string
 import logging
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+import settings_local
+
+password = settings_local.passwords['default']
+remote_host = settings_local.remote_host
+logfile = settings_local.logfile
 
 from util import runCommand
 
@@ -19,14 +27,13 @@ class condorman:
     condor_usermap = {}
     debug = False
     default_prio = 100000.0
-    
-    def __init__(self):
-        self.conn = psycopg2.connect("dbname='condorman' user='condoradmin'"
-                                "host='cmssrv101.fnal.gov' "
-                                "password='__CHANGEME: CONDORADMIN PASSWORD GOES HERE'")
-        self.cursor = self.conn.cursor()
 
-        self.logfile = '/root/condorman/condorman.log'
+    def __init__(self):
+        self.conn = psycopg2.connect("dbname='condorman' user='condoradmin' "
+                                "host='%s' password='%s' " % (remote_host, password))
+        self.cursor = self.conn.cursor()
+        self.logfile = logfile
+
         logging.basicConfig(filename=self.logfile, level=logging.DEBUG,
                             format='%(asctime)s %(message)s',
                             datefmt='%m/%d/%Y %I:%M:%S %p')
