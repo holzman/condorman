@@ -15,7 +15,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 import settings_local
 
 password = settings_local.passwords['default']
-remote_host = settings_local.remote_host
+frontend_host = settings_local.frontend_host
 logfile = settings_local.logfile
 
 from util import runCommand
@@ -30,7 +30,7 @@ class condorman:
 
     def __init__(self):
         self.conn = psycopg2.connect("dbname='condorman' user='condoradmin' "
-                                "host='%s' password='%s' " % (remote_host, password))
+                                "host='%s' password='%s' " % (frontend_host, password))
         self.cursor = self.conn.cursor()
         self.logfile = logfile
 
