@@ -1,19 +1,33 @@
+%define prefix_frontend /var/lib/djangoapp
+%define prefix_backend /var/lib/condorman-backend
+
 Name:		condorman
 Version:        1.0
 Release:        0%{?dist}
 Summary:        HTCondor Batch Priority Manager
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-Prefix: 	/var/lib/djangoapp
 Source:         condorman-%{version}.tar.gz
 AutoReqProv: no
 BuildArch:   noarch
-
 Group: default
 License:        Fermitools Software Legal Information (Modified BSD License)
 Packager: 	Burt Holzman <burt@fnal.gov>
-
 %description
-Manages batch priority for HTCondor systems
+HTCondor Batch Priority Manager
+
+
+
+%package frontend
+Summary: HTCondor Batch Priority Manager frontend
+Prefix: 	%{prefix_frontend}
+%description frontend
+This package manages batch priority for HTCondor systems via a django app, web frontend, and postgres db.
+
+%package backend
+Summary: HTCondor Batch Priority Manager backend
+Prefix: 	%{prefix_backend}
+%description backend
+A simple python script to query the postgres db and adjust HTCondor priorities. This should be installed on the HTCondor central manager.
 
 %prep
 %setup -n condorman-%{version}
@@ -22,26 +36,29 @@ Manages batch priority for HTCondor systems
 
 %install
 rm -rf %{buildroot}
-mkdir -p %{buildroot}/%{prefix}
-#cd condorman-%{version}
-cp -av condorman %{buildroot}/%{prefix}
-cp -a mysite %{buildroot}/%{prefix}
-cp -a templates %{buildroot}/%{prefix}
-cp -a manage.py %{buildroot}/%{prefix}
+mkdir -p %{buildroot}/%{prefix_frontend}
+
+cp -av condorman %{buildroot}/%{prefix_frontend}
+cp -a mysite %{buildroot}/%{prefix_frontend}
+cp -a templates %{buildroot}/%{prefix_frontend}
+cp -a manage.py %{buildroot}/%{prefix_frontend}
+
+mkdir -p %{buildroot}/%{prefix_backend}
+cp -av backend/* %{buildroot}/%{prefix_backend}
 
 %clean
 
-%files
+%files backend
 %defattr(-,root,root,-)
+%{prefix_backend}
 
-# Reject config files already listed or parent directories, then prefix files
-# with "/", then make sure paths with spaces are quoted. I hate rpm so much.
-%{prefix}/condorman
-%{prefix}/mysite
-%{prefix}/manage.py
-%{prefix}/manage.pyc
-%{prefix}/manage.pyo
-%{prefix}/templates
+%files frontend
+%defattr(-,root,root,-)
+%{prefix_frontend}/condorman
+%{prefix_frontend}/mysite
+%{prefix_frontend}/manage.py
+%{prefix_frontend}/manage.py[c|o]
+%{prefix_frontend}/templates
 
 %changelog
 
