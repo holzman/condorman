@@ -3,7 +3,7 @@
 
 Name:		condorman
 Version:        1.0
-Release:        0%{?dist}
+Release:        1%{?dist}
 Summary:        HTCondor Batch Priority Manager
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 Source:         condorman-%{version}.tar.gz
@@ -61,4 +61,7 @@ cp -av backend/* %{buildroot}/%{prefix_backend}
 %{prefix_frontend}/templates
 
 %changelog
+* Wed Jan 21 2015 Burt Holzman <burt@fnal.gov> - 1.0-1
+- Fix condor_userprio path
+
 
