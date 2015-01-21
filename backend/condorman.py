@@ -20,7 +20,7 @@ logfile = settings_local.logfile
 
 from util import runCommand
 
-userprio_bin = '/opt/condor/bin/condor_userprio'
+userprio_bin = '/usr/bin/condor_userprio'
 class condorman:
     cursor = ''
     conn = ''
